@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout"
+    >
+
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="forecastVM"
+            type="com.test.locationforecastmvp.model.data.viewmodel.ForecastViewModel"
+            />
+        <variable
+            name="isLoading"
+            type="boolean"
+            />
+        <variable
+            name="isOffline"
+            type="boolean"
+            />
+        <variable
+            name="noRecords"
+            type="boolean"
+            />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimaryLight"
+        tools:context=".forecast.ForecastActivity"
+        >
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentTop="true"
+            android:background="@color/colorPrimary"
+            app:elevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:titleTextColor="@android:color/white"
+            />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/gl_horizontal_city_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.16"
+            />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/gl_horizontal_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.22"
+            />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/gl_horizontal_middle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.35"
+            />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/gl_horizontal_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.48"
+            />
+
+        <TextView
+            android:id="@+id/tv_offline_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/pink_offline_bg"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:text="@string/connection_warning"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/white"
+            android:visibility="@{isOffline ? View.VISIBLE : View.INVISIBLE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            tools:visibility="visible"
+            />
+
+        <TextView
+            android:id="@+id/tv_city_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|bottom"
+            android:text="@{forecastVM.name}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            app:autoSizeMaxTextSize="100sp"
+            app:autoSizeMinTextSize="12sp"
+            app:autoSizeStepGranularity="2sp"
+            app:autoSizeTextType="uniform"
+            app:layout_constraintBottom_toTopOf="@id/gl_horizontal_top"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/gl_horizontal_city_top"
+            tools:text="Nizhniy Novgorod"
+            />
+
+        <ImageView
+            android:id="@+id/iv_condition"
+            forecastIcon="@{forecastVM.conditionId}"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:contentDescription="@string/desc_weather_icon"
+            android:padding="8dp"
+            app:layout_constraintBottom_toTopOf="@id/gl_horizontal_bottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/gl_horizontal_middle"
+            tools:src="@drawable/ic_weather_partlycloudy"
+            />
+
+        <TextView
+            android:id="@+id/tv_temp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="center|bottom"
+            android:maxLines="1"
+            android:text='@{forecastVM == null ? "" : forecastVM.temp + "°C"}'
+            app:autoSizeMaxTextSize="100sp"
+            app:autoSizeMinTextSize="12sp"
+            app:autoSizeStepGranularity="2sp"
+            app:autoSizeTextType="uniform"
+            app:layout_constraintBottom_toBottomOf="@id/gl_horizontal_middle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/gl_horizontal_top"
+            tools:text="22 °C"
+            />
+
+        <TextView
+            android:id="@+id/tv_conditions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{forecastVM == null ? "" : forecastVM.description}'
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/gl_horizontal_bottom"
+            tools:text="Clouds"
+            />
+
+        <TextView
+            android:id="@+id/tv_desc_min"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{forecastVM == null ? "" : "min "}'
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toStartOf="@id/tv_temp_min"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_temp_max"
+            tools:text="min "
+            />
+        <TextView
+            android:id="@+id/tv_temp_min"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{forecastVM == null ? "" : forecastVM.tempMin + "°C"}'
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toStartOf="@id/tv_desc_max"
+            app:layout_constraintStart_toEndOf="@id/tv_desc_min"
+            app:layout_constraintTop_toTopOf="@id/tv_desc_min"
+            tools:text="21.68°C"
+            />
+
+
+        <TextView
+            android:id="@+id/tv_desc_max"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text='@{forecastVM == null ? "" : "max "}'
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toStartOf="@id/tv_temp_max"
+            app:layout_constraintStart_toEndOf="@id/tv_temp_min"
+            app:layout_constraintTop_toTopOf="@+id/tv_temp_max"
+            tools:text="max "
+            />
+        <TextView
+            android:id="@+id/tv_temp_max"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text='@{forecastVM.tempMax == null ? "" : forecastVM.tempMax + "°C"}'
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_desc_max"
+            app:layout_constraintTop_toBottomOf="@id/tv_conditions"
+            tools:text="23.45°C"
+            />
+
+        <TextView
+            android:id="@+id/tv_desc_pressure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{forecastVM == null ? "" : "pressure "}'
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toStartOf="@+id/tv_pressure"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_pressure"
+            tools:text="pressure "
+            />
+        <TextView
+            android:id="@+id/tv_pressure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{forecastVM == null ? "" : forecastVM.pressure + "hPa"}'
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_desc_pressure"
+            app:layout_constraintTop_toBottomOf="@id/tv_temp_max"
+            tools:text="1016hPa"
+            />
+
+        <TextView
+            android:id="@+id/tv_desc_humidity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{forecastVM == null ? "" : "humidity "}'
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toStartOf="@id/tv_humidity"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_humidity"
+            tools:text="humidity "
+            />
+        <TextView
+            android:id="@+id/tv_humidity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{forecastVM == null ? "" : forecastVM.humidity + "%"}'
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_desc_humidity"
+            app:layout_constraintTop_toBottomOf="@+id/tv_desc_pressure"
+            tools:text="38%"
+            />
+
+        <TextView
+            android:id="@+id/tv_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            android:text='@{forecastVM == null ? "" : "Device location"}'
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/colorPrimaryDark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_desc_humidity"
+            tools:text="Device location"
+            />
+
+        <TextView
+            android:id="@+id/tv_desc_lon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{forecastVM == null ? "" : "Lon: "}'
+            android:textColor="@color/colorPrimaryDark"
+            app:layout_constraintEnd_toStartOf="@id/tv_longitude"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_location"
+            tools:text="Lon: "
+            />
+        <TextView
+            android:id="@+id/tv_longitude"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{forecastVM == null ? "" : forecastVM.lon}'
+            android:textColor="@color/colorPrimaryDark"
+            app:layout_constraintEnd_toStartOf="@id/tv_desc_lat"
+            app:layout_constraintStart_toEndOf="@id/tv_desc_lon"
+            app:layout_constraintTop_toTopOf="@id/tv_desc_lon"
+            tools:text="44"
+            />
+
+        <TextView
+            android:id="@+id/tv_desc_lat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text='@{forecastVM == null ? "" : "Lat: "}'
+            android:textColor="@color/colorPrimaryDark"
+            app:layout_constraintEnd_toStartOf="@id/tv_latitude"
+            app:layout_constraintStart_toEndOf="@id/tv_longitude"
+            app:layout_constraintTop_toTopOf="@id/tv_desc_lon"
+            tools:text="Lat: "
+            />
+        <TextView
+            android:id="@+id/tv_latitude"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{forecastVM == null ? "" : forecastVM.lat}'
+            android:textColor="@color/colorPrimaryDark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_desc_lat"
+            app:layout_constraintTop_toTopOf="@id/tv_desc_lon"
+            tools:text="56.33"
+            />
+
+        <!--todo remove?-->
+        <!--<TextView-->
+        <!--android:id="@+id/tv_timestamp"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="2019-06-3_16:35:56"-->
+        <!--android:textAppearance="@style/TextAppearance.AppCompat.Small"-->
+        <!--android:textColor="@color/colorPrimaryDark"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@id/tv_desc_lon"-->
+        <!--tools:text="2019-06-3_16:35:56"-->
+        <!--/>-->
+
+        <Button
+            android:id="@+id/btn_get_forecast"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="40dp"
+            android:background="@color/colorPrimary"
+            android:text="@string/get_forecast"
+            android:textColor="@android:color/white"
+            android:visibility="@{isLoading ? View.GONE : View.VISIBLE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            />
+
+        <View
+            android:id="@+id/v_loading_bg"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#99ffffff"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            />
+        <ProgressBar
+            android:id="@+id/loading_spinner"
+            style="?android:progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            tools:visibility="visible"
+            />
+        <android.support.constraint.Group
+            android:id="@+id/loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{!isLoading ? View.GONE : View.VISIBLE}"
+            app:constraint_referenced_ids="loading_spinner,v_loading_bg"
+            tools:visibility="gone"
+            />
+
+        <ImageView
+            android:id="@+id/iv_no_records"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:contentDescription="@string/no_records_icon"
+            android:src="@drawable/ic_database_search"
+            android:visibility="@{noRecords ? View.VISIBLE : View.INVISIBLE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/gl_horizontal_bottom"
+            tools:visibility="gone"
+            />
+        <TextView
+            android:id="@+id/tv_no_records"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:switchTextAppearance="@style/TextAppearance.AppCompat.Large"
+            android:text="@string/no_previous_forecast"
+            android:visibility="@{noRecords ? View.VISIBLE : View.INVISIBLE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_no_records"
+            tools:visibility="gone"
+            />
+
+        <android.support.constraint.Group
+            android:id="@+id/views"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{!noRecords ? View.VISIBLE : View.INVISIBLE}"
+            app:constraint_referenced_ids="tv_humidity,tv_desc_max,tv_location,tv_city_name,tv_desc_min,tv_temp,tv_pressure,tv_longitude,tv_latitude,tv_temp_max,tv_conditions,tv_desc_lon,tv_desc_humidity,tv_desc_lat,tv_desc_pressure,tv_temp_min"
+            />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

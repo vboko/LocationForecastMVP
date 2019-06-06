@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">LocationForecastMVP</string>
+    <string name="settings">Settings</string>
+    <string name="about">About</string>
+    <string name="connection_warning">Your device wasn\'t connected to Internet during last request Or GPS was disabled Please check your connection and try again</string>
+    <string name="desc_weather_icon">Current weather conditions icon</string>
+    <string name="get_forecast">Get Forecast</string>
+    <string name="no_records_icon">No records icon</string>
+    <string name="no_previous_forecast">No previous forecast records were found in a local DB</string>
+    <string name="location_forecast">Location forecast</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+</resources>
