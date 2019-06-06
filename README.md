@@ -5,7 +5,7 @@
 
 План архитектуры приложения
 
-<a href="https://ibb.co/LPS6QBB"><img src="https://i.ibb.co/KG67NBB/Location-Forecast-MVP.jpg" alt="Location-Forecast-MVP" border="0"></a>
+<a href="https://ibb.co/FbZt1Gh"><img src="https://i.ibb.co/d0Cyvnf/blueprint.jpg" alt="blueprint" border="0"></a>
 
 Основной экран
 
